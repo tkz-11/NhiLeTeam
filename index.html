@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>20/11 – Tri ân thầy cô</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+  <style>
+  
+  
+  
+  /* ============ NÂNG CẤP BÌA SÁCH "MẠ VÀNG" ============ */
+.cover-front {
+  /* Thêm 2 dòng này để định vị cho viền vàng */
+  position: absolute; 
+  z-index: 10;
+  
+  /* Tạo hiệu ứng gáy sách nổi khối */
+  box-shadow: 
+    var(--shadow),
+    inset 4px 0 12px rgba(0,0,0,0.2),
+    inset -2px 0 2px rgba(255,255,255,0.05);
+}
+
+/* Thêm viền vàng */
+.cover-front::before {
+  content: "";
+  position: absolute;
+  inset: 12px; /* Khoảng cách từ mép bìa */
+  border: 1.5px solid var(--gold);
+  border-radius: 8px; /* Bo góc cho viền */
+  opacity: 0.7;
+  
+  /* Thêm lân tinh nhẹ cho viền vàng */
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); 
+}
+
+/* Thêm một chi tiết nhỏ ở gáy sách */
+.cover-front::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 80px;
+  background: var(--gold);
+  border-radius: 2px;
+  opacity: 0.5;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
+  
+    /* ============ CƠ BẢN ============ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root{
+      --bg1:#fef9f3; --bg2:#fdf5e6; /* nền tổng thể */
+      --ink:#3c2a1e; /* mực chữ */
+      --accent:#e25c3d; /* nhấn */
+      --paper:#fffaf0; /* giấy */
+      --paper-edge:#eadcc7; /* viền giấy */
+      --cover:#8a4b2a; /* bìa sách */
+      --cover-dark:#6f3c22;
+      --gold:#d4af37;
+      --shadow:0 20px 60px rgba(0,0,0,.15);
+    }
+
+    html, body { height: 100%; }
+    body{
+      background: linear-gradient(135deg,var(--bg1) 0%, var(--bg2) 100%);
+      font-family: "Times New Roman", serif;
+      color: var(--ink);
+      overflow: hidden;
+    }
+
+    /* ============ BỐ CỤC 2 CỘT ============ */
+    .layout{ display:flex; height:100vh; width:100vw; }
+    .left-pane{ position:relative; width:50vw; height:100vh; overflow:hidden; }
+    .right-pane{ position:relative; width:50vw; height:100vh; display:grid; place-items:center; padding:32px 20px; }
+
+    /* ============ HOA BÊN TRÁI (GIỮ GẦN NHƯ NGUYÊN BẢN) ============ */
+    .container{ position:relative; width:100%; height:100%; overflow:hidden; }
+
+    #particleCanvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:100; }
+
+    .wrapper-paper{ position:absolute; bottom:50px; left:72%; transform:translateX(-50%); width:500px; height:400px; opacity:0; animation:fadeInPaper 1s ease-out forwards; z-index:1; }
+    .paper-left, .paper-right{ position:absolute; bottom:0; width:250px; height:400px; background:linear-gradient(145deg,#e8d5c4 0%, #f5e6d3 50%, #d4c4b0 100%); clip-path: polygon(50% 0%, 100% 20%, 100% 100%, 0% 100%, 0% 20%); filter: drop-shadow(2px 4px 12px rgba(0,0,0,.15)); }
+    .paper-left{ left:0; transform-origin:bottom right; animation:wrapLeft 1.5s ease-out .5s forwards; }
+    .paper-right{ right:5; transform-origin:bottom left; animation:wrapRight 1.5s ease-out .5s forwards; }
+
+    #bouquet{ position:absolute; inset:0; z-index:10; left: calc(72% - 365px); }
+    .sunflower{ position:absolute; bottom:0; transform-origin:bottom center; }
+
+    .stem{ width:12px; height:0; position:absolute; left:50%; bottom:0; transform:translateX(-50%); transform-origin:bottom center; }
+    .stem::before{ content:""; position:absolute; inset:0; background:linear-gradient(90deg,#4a5f2e 0%, #6b8e4a 30%, #7fa84f 50%, #6b8e4a 70%, #5a7c3e 100%); border-radius:6px; box-shadow: inset -2px 0 4px rgba(0,0,0,.2), inset 2px 0 4px rgba(255,255,255,.1), 2px 2px 8px rgba(0,0,0,.15); }
+    .stem::after{ content:""; position:absolute; width:2px; height:100%; left:30%; background:linear-gradient(to bottom, rgba(127,168,79,.6) 0%, transparent 50%); border-radius:1px; }
+
+    .leaf {
+    position: absolute;
+    width: 45px;  /* Có thể điều chỉnh kích thước */
+    height: 80px; /* Có thể điều chỉnh kích thước */
+    background: linear-gradient(135deg, #6b8e4a 0%, #7fa84f 30%, #5a7c3e 100%);
+    
+    /* BỎ border-radius VÀ THAY BẰNG clip-path */
+    /* border-radius: 50% 0 50% 0; */
+    clip-path: polygon(50% 100%, 0% 75%, 10% 40%, 50% 0%, 90% 40%, 100% 75%);
+    
+    box-shadow: inset 0 0 10px rgba(0,0,0,.2), 2px 2px 8px rgba(0,0,0,.15); /* Cập nhật shadow nhẹ */
+    opacity: 0;
+}
+
+.leaf::before {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 85%; /* Cho gân lá chạy gần hết */
+    left: 50%;
+    top: 5%; /* Bắt đầu từ gần ngọn */
+    background: linear-gradient(to bottom, rgba(127,168,79,.6) 0%, rgba(90,124,62,.4) 100%);
+    
+    /* Căn giữa gân lá, không cần xoay */
+    transform: translateX(-50%); 
+    border-radius: 1px;
+}
+    .leaf-left{ left:-25px; transform-origin:bottom right; transform:rotate(-20deg); animation:growLeaf .6s ease-out forwards; }
+    .leaf-right{ right:-25px; transform-origin:bottom left; transform:rotate(20deg) scaleX(-1); animation:growLeaf .6s ease-out forwards; }
+
+    .flower-head{ position:absolute; left:50%; transform:translateX(-50%) scale(0); transform-origin:center bottom; z-index:5; }
+    .petals{ position:relative; width:120px; height:120px; transform:translate(-50%,-50%); }
+    .petal{ position:absolute; width:40px; height:60px; background:linear-gradient(#ffd93d, #ffb300 50%, #f57f17 100%); border-radius:50% 50% 50% 50% / 70% 70% 30% 30%; top:50%; left:50%; transform-origin:50% 100%; box-shadow:0 2px 6px rgba(0,0,0,.2), inset 0 -10px 20px rgba(255,179,0,.3); }
+    .flower-center{ width:73px; height:73px; background: radial-gradient(circle at 35% 35%, #654321 0%, #4a3319 40%, #2d1f0f 100%); border-radius:50%; position: absolute; top: 50%; left: 50%; margin: -7px 0 0 -36px; box-shadow: inset 0 3px 10px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.3); z-index:10; }
+    .flower-center::before{ content:""; position:absolute; inset:0; background-image:
+      radial-gradient(circle at 25% 25%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 65% 28%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 45% 45%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 75% 55%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 35% 65%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 55% 75%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 20% 50%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 70% 35%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 50% 60%, rgba(139,69,19,.4) 1px, transparent 1px),
+      radial-gradient(circle at 80% 70%, rgba(139,69,19,.4) 1px, transparent 1px);
+      background-size:100% 100%; border-radius:50%; }
+
+    .baby-breath{ position:absolute; width:8px; height:8px; background:radial-gradient(circle,#fff 0%, #f5f5f5 100%); border-radius:50%; opacity:0; box-shadow:0 0 6px rgba(255,255,255,.9), 0 0 3px rgba(200,200,200,.5); z-index:8; }
+
+    /* ============ SÁCH & LỜI CHÚC BÊN PHẢI ============ */
+    .book-scene{ width:min(640px,92%); height:min(460px,76vh); perspective:1600px; }
+
+    .book{ position:relative; width:100%; height:100%; transform-style:preserve-3d; }
+
+    /* Bìa sau */
+    .cover-back{ position:absolute; inset:0; background:linear-gradient(135deg,var(--cover-dark), var(--cover)); border-radius:16px; box-shadow:var(--shadow); transform: translateZ(-6px); }
+
+    /* Chồng trang giấy */
+    .pages{ position:absolute; inset:12px; background:var(--paper); border-radius:12px; box-shadow:0 6px 30px rgba(0,0,0,.08) inset; transform: translateZ(0); overflow:hidden; }
+
+    /* Hoạ tiết giấy */
+    .pages::before{ content:""; position:absolute; inset:0; background:
+      repeating-linear-gradient(180deg, rgba(0,0,0,.03) 0 2px, transparent 2px 34px),
+      linear-gradient(180deg,#fffdf7,#fff7eb);
+      opacity:.9; pointer-events:none; }
+    .pages::after{ content:""; position:absolute; inset:0; border-radius:12px; box-shadow: inset 0 0 0 2px var(--paper-edge); pointer-events:none; }
+
+    /* Bìa trước – mặc định ĐÓNG, chỉ mở khi thêm .open */
+    .cover-front{ position:absolute; inset:0; background:linear-gradient(135deg,var(--cover), var(--cover-dark)); border-radius:16px; box-shadow:var(--shadow); transform-origin:left center; transform: rotateY(0deg) translateZ(8px); }
+    .cover-front.open{ animation: openCover 1.6s cubic-bezier(.19,1,.22,1) .1s forwards; }
+
+    /* Trang bên phải hiển thị lời chúc - FIX */
+    .page-right{ 
+      position:absolute; 
+      right:0; 
+      top:0; 
+      bottom:0; 
+      width:100%; 
+      padding:40px 32px; 
+      display:flex; 
+      flex-direction:column; 
+      justify-content:space-between;
+    }
+    .page-left { position:absolute; left:0; top:0; bottom:0; width:45%; padding:26px; opacity:.9; }
+
+    .message-text{ 
+      font-size: clamp(15px, 1.8vw, 20px); 
+      line-height: 34px; 
+      color: var(--ink); 
+      text-wrap: pretty; 
+      white-space: normal;
+      filter: drop-shadow(0 1px 0 rgba(255,255,255,.6)); 
+      opacity:0; 
+      transform: translateY(6px); 
+      animation: fadeInUp .6s ease .9s forwards; 
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: auto;
+      word-spacing: 0.05em;
+      letter-spacing: 0.3px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 12;
+      -webkit-box-orient: vertical;
+    }
+
+    .message-text.finished{ 
+      text-align: justify; 
+      text-justify: inter-word; 
+    }
+
+    .message-meta{ 
+      font-size:13px; 
+      opacity:.65; 
+      margin-top:9px;
+      text-align: right;
+    }
+
+    .book-controls{ 
+      display:flex; 
+      gap:10px; 
+      width:100%;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    .btn{ 
+      appearance:none; 
+      border:0; 
+      border-radius:999px; 
+      padding:10px 16px; 
+      background:#fff; 
+      box-shadow:0 8px 20px rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.06); 
+      color:#333; 
+      cursor:pointer; 
+      font-weight:600; 
+      font-size:14px; 
+      transition:.25s ease; 
+    }
+    .btn:hover{ 
+      transform: translateY(-1px); 
+      box-shadow:0 12px 24px rgba(0,0,0,.12), inset 0 0 0 1px rgba(0,0,0,.08); 
+    }
+
+    .ribbon{ position:absolute; top:18px; left:18px; background:linear-gradient(135deg,#ff7f50,#e25c3d); color:#fff; padding:8px 14px; border-radius:10px; font-weight:700; letter-spacing:.4px; box-shadow:0 6px 18px rgba(226,92,61,.3); transform:rotate(-4deg); z-index:2; }
+
+    /* Demo tiêu đề */
+    .heading{ 
+      position:absolute; 
+      top:24px; 
+      left:24px; 
+      font-weight:900; 
+      letter-spacing:.3px; 
+      font-size: clamp(16px, 1.5vw, 20px); 
+      color:#fff;
+      background: linear-gradient(135deg, rgba(139,75,42,.85) 0%, rgba(107,60,34,.85) 100%);
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.2);
+      z-index: 150;
+      max-width: 90%;
+      white-space: normal;
+    }
+
+    /* ============ NHẠC DEMO GÓC PHẢI DƯỚI ============ */
+    .audio-fab{ position:fixed; right:18px; bottom:18px; z-index:999; display:flex; align-items:center; gap:10px; }
+    .fab-btn{ width:54px; height:54px; border-radius:50%; display:grid; place-items:center; background:#fff; box-shadow:0 10px 26px rgba(0,0,0,.18), inset 0 0 0 2px rgba(0,0,0,.06); border:none; cursor:pointer; transition:.25s ease; }
+    .fab-btn:hover{ transform: translateY(-2px); }
+    .fab-btn.playing{ box-shadow:0 0 0 10px rgba(212,175,55,.12), 0 10px 26px rgba(0,0,0,.18); }
+    .fab-label{ background:#fff; border-radius:10px; padding:8px 12px; font-size:13px; box-shadow:0 6px 18px rgba(0,0,0,.12); }
+
+    /* ============ HIỆU ỨNG ============ */
+    @keyframes fadeInPaper{ to{ opacity:1 } }
+    @keyframes wrapLeft{ from{ transform:rotate(0) } to{ transform:rotate(-20deg) } }
+    @keyframes wrapRight{ from{ transform:rotate(0) } to{ transform:rotate(20deg) } }
+    @keyframes growStem{ from{ height:0 } to{ height: var(--stem-height) } }
+    @keyframes growLeaf{ from{ opacity:0; transform:scale(0) rotate(var(--leaf-rotate)); } to{ opacity:1; transform:scale(1) rotate(var(--leaf-rotate)); } }
+    @keyframes bloomFlower{ 0%{ transform:translateX(-50%) scale(0) rotate(-10deg); opacity:0 } 50%{ transform:translateX(-50%) scale(1.15) rotate(5deg) } 100%{ transform:translateX(-50%) scale(1) rotate(0); opacity:1 } }
+    @keyframes gentleGlow{ 0%,100%{ filter:drop-shadow(0 0 8px rgba(255,217,61,.4)) } 50%{ filter:drop-shadow(0 0 15px rgba(255,217,61,.7)) } }
+    @keyframes openCover{ from{ transform: rotateY(0) translateZ(8px) } to{ transform: rotateY(-160deg) translateZ(8px) } }
+    @keyframes fadeInUp{ from{ opacity:0; transform: translateY(6px) } to{ opacity:1; transform: translateY(0) } }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column-reverse;
+  }
+  .left-pane, .right-pane {
+    width: 100vw;
+  }
+  .left-pane {
+    height: 50vh;
+  }
+  .right-pane {
+    height: 50vh;
+    padding: 14px;
+  }
+
+  .book-scene {
+    height: 100%;
+  }
+
+  /* ⭐ RẤT QUAN TRỌNG: Cho phép flex con (message-text) co lại để scroll */
+  .page-right {
+    padding: 8px 20px 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;   /* Không dùng space-between nữa */
+    gap: 8px;
+    min-height: 0;                 /* Cho phép con có height nhỏ hơn cha */
+    overflow: hidden;              /* Giữ hiệu ứng sách, scroll nằm trong message-text */
+  }
+
+  /* ⭐ Lời chúc có thể scroll dọc */
+  .message-text {
+    /* Ghi đè cấu hình desktop */
+    display: block;                /* bỏ -webkit-box */
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+
+    overflow-y: auto;              /* THANH CUỘN DỌC */
+    overflow-x: hidden;
+
+    flex: 1 1 auto;                /* chiếm hết phần trống còn lại */
+    min-height: 0;                 /* bắt buộc với flex item muốn scroll */
+    max-height: 100%;              /* không vượt quá trang giấy */
+
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ⭐ Vô hiệu hóa "lò xo" (div style="flex: 1;") ngay sau #messageText */
+  #messageText + div {
+    flex: 0 0 auto !important;
+    height: 12px;                  /* chỉ giữ 1 khoảng cách nhỏ */
+  }
+
+  .heading {
+    left: 14px;
+    top: 12px;
+  }
+  .ribbon {
+    top: 12px;
+    left: 12px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .wrapper-paper {
+    left: 50%;
+    transform: translateX(-41.5%) scale(0.4) translateY(400px);
+  }
+
+  #bouquet {
+    left: 29%;
+    transform: translateX(-105px) scale(0.4);
+    transform-origin: center bottom;
+  }
+
+  /* Tuỳ chọn: Cho phép toàn bộ trang cuộn thêm nếu cần */
+  body {
+    overflow: auto;
+  }
+}
+
+
+    /* ===== MODAL NHẬP TÊN ===== */
+    .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:1100; }
+    .modal-backdrop.show{ display:flex; }
+    .modal-card {
+  width: min(520px, 92vw);
+  background: var(--paper); /* Sửa: Dùng màu giấy */
+  border-radius: 12px; /* Sửa: Bo góc ít hơn */
+  box-shadow: var(--shadow); /* Sửa: Dùng shadow nhất quán */
+  padding: 22px;
+  border: 1px solid var(--paper-edge); /* Thêm: viền giấy */
+}
+
+/* TÌM VÀ SỬA LẠI .modal-title */
+.modal-title {
+  font-weight: 800;
+  font-size: 20px;
+  margin-bottom: 6px;
+  color: var(--cover-dark); /* Sửa: Dùng màu bìa sách đậm */
+}
+    .modal-sub{ font-size:14px; opacity:.8; margin-bottom:16px; }
+    .modal-row{ display:flex; gap:10px; }
+    .modal-row input{ flex:1; border-radius:12px; border:1px solid #eadcc7; padding:12px 14px; font-size:16px; outline:none; }
+    .modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:16px; }
+    .btn-secondary{ background:#fff; border:1px solid #eadcc7; }
+
+
+  </style>
+</head>
+<body>
+
+  <div class="layout">
+    <!-- BÊN TRÁI: HOA -->
+    <section class="left-pane">
+      <div class="container" id="leftContainer">
+        <h1 class="heading">NhiLe Team – Tri ân 20/11 ngày Nhà Giáo Việt Nam</h1>
+        <div class="wrapper-paper"><div class="paper-left"></div><div class="paper-right"></div></div>
+        <canvas id="particleCanvas"></canvas>
+        <div id="bouquet"></div>
+      </div>
+    </section>
+
+    <!-- BÊN PHẢI: SÁCH MỞ & LỜI CHÚC -->
+    <section class="right-pane">
+      <div class="book-scene">
+        <div class="book">
+          <div class="cover-back"></div>
+          <div class="pages">
+            <div class="page-left"></div>
+            <div class="page-right">
+              <div class="ribbon">20/11</div>
+              <div style="height: 36px;"></div>
+              <div id="messageText" class="message-text"></div>
+              <div style="flex: 1;"></div>
+              <div>
+                <div class="message-meta" id="messageMeta"></div>
+                <div class="book-controls">
+                 
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cover-front" aria-label="Bìa sách"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- POPUP NHẬP TÊN THẦY/CÔ -->
+  <div class="modal-backdrop" id="nameModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-title" id="modalTitle">Nhập tên thầy/cô</div>
+      <div class="modal-sub">Ví dụ: <em>Cô Lan</em>, <em>Thầy Minh</em>… </div>
+      <div class="modal-row">
+        <input id="teacherInput" type="text" placeholder="Nhập tên thầy/cô…" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn" id="saveName">Gửi lời tri ân</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NHẠC DEMO GÓC PHẢI DƯỚI -->
+  <div class="audio-fab" aria-live="polite">
+    <button class="fab-btn" id="audioBtn" title="Nhạc nền ">
+      <svg id="iconPlay" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+      <svg id="iconPause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"></path></svg>
+    </button>
+    <div class="fab-label">Nhạc nền </div>
+    <audio id="song" src="Nhac nen.MP3" preload="auto"></audio>
+  </div>
+
+  <script>
+    /* ===================== HOA – tinh chỉnh canvas theo ô trái ===================== */
+    const bouquet = document.getElementById('bouquet');
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    const leftContainer = document.getElementById('leftContainer');
+
+    function sizeCanvas(){
+      const rect = leftContainer.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    sizeCanvas();
+
+    const flowers = [
+      { left: 180, stemHeight: 420, delay: 2.0, size: 1.15, rotation: -5 },
+      { left: 240, stemHeight: 480, delay: 2.3, size: 1.3, rotation: 0 },
+      { left: 300, stemHeight: 450, delay: 2.6, size: 1.2, rotation: 5 },
+      { left: 120, stemHeight: 380, delay: 2.2, size: 0.95, rotation: -8 },
+      { left: 210, stemHeight: 400, delay: 2.8, size: 1.05, rotation: 3 },
+      { left: 270, stemHeight: 410, delay: 3.0, size: 1.1, rotation: -3 },
+      { left: 330, stemHeight: 370, delay: 2.5, size: 0.9, rotation: 7 },
+      { left: 150, stemHeight: 440, delay: 3.2, size: 1.0, rotation: -2 },
+      { left: 360, stemHeight: 390, delay: 2.7, size: 0.95, rotation: 4 }
+    ];
+
+    flowers.forEach((config) => { setTimeout(() => { createSunflower(config); }, config.delay * 1000); });
+
+    function createSunflower(config){
+      const flower = document.createElement('div');
+      flower.className = 'sunflower';
+      flower.style.left = config.left + 'px';
+      flower.style.transform = `rotate(${config.rotation}deg)`;
+
+      const stem = document.createElement('div');
+      stem.className = 'stem';
+      stem.style.setProperty('--stem-height', config.stemHeight + 'px');
+      stem.style.animation = `growStem 1.2s ease-out forwards`;
+
+      const leafLeft = document.createElement('div');
+      leafLeft.className = 'leaf leaf-left';
+      leafLeft.style.bottom = (config.stemHeight * 0.40) + 'px';
+      leafLeft.style.setProperty('--leaf-rotate', '-40deg');
+      leafLeft.style.animationDelay = '0.6s';
+
+      const leafRight = document.createElement('div');
+      leafRight.className = 'leaf leaf-right';
+      leafRight.style.bottom = (config.stemHeight * 0.60) + 'px';
+      leafRight.style.setProperty('--leaf-rotate', '40deg');
+      leafRight.style.animationDelay = '0.8s';
+
+      stem.appendChild(leafLeft); stem.appendChild(leafRight);
+
+      const flowerHead = document.createElement('div');
+      flowerHead.className = 'flower-head';
+      flowerHead.style.bottom = config.stemHeight + 'px';
+      flowerHead.style.animation = `bloomFlower 1s ease-out 1.2s forwards, gentleGlow 3s ease-in-out 2.5s infinite`;
+
+      const petals = document.createElement('div');
+      petals.className = 'petals';
+      petals.style.transform = `scale(${config.size})`;
+
+      for (let i = 0; i < 13; i++){
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        const angle = (360/13) * i;
+        petal.style.transform = `translate(-50%,-50%) rotate(${angle}deg) translateY(-35px)`;
+        petals.appendChild(petal);
+      }
+
+      const center = document.createElement('div');
+      center.className = 'flower-center';
+      petals.appendChild(center);
+
+      flowerHead.appendChild(petals);
+      flower.appendChild(stem);
+      flower.appendChild(flowerHead);
+      bouquet.appendChild(flower);
+
+      const x_offset = config.left + 40; // Tọa độ X tương đối so với bó hoa
+      const y_height_from_bottom = config.stemHeight + 50; // Chiều cao Y tính từ đáy
+      
+      setTimeout(() => { 
+        startParticles(x_offset, y_height_from_bottom); 
+      }, 2000);
+    }
+
+    const babyPositions = [
+      { left: 100, bottom: 180 }, { left: 140, bottom: 250 }, { left: 170, bottom: 210 }, { left: 200, bottom: 280 },
+      { left: 230, bottom: 230 }, { left: 260, bottom: 270 }, { left: 290, bottom: 220 }, { left: 320, bottom: 260 },
+      { left: 350, bottom: 200 }, { left: 130, bottom: 300 }, { left: 220, bottom: 320 }, { left: 280, bottom: 310 },
+      { left: 160, bottom: 340 }, { left: 250, bottom: 350 }, { left: 310, bottom: 330 }, { left: 190, bottom: 190 },
+      { left: 340, bottom: 240 }, { left: 370, bottom: 280 }
+    ];
+
+    babyPositions.forEach((pos, index) => {
+      setTimeout(() => {
+        const baby = document.createElement('div');
+        baby.className = 'baby-breath';
+        baby.style.left = pos.left + 'px';
+        baby.style.bottom = pos.bottom + 'px';
+        baby.style.animation = `fadeInUp .5s ease-out forwards`;
+        bouquet.appendChild(baby);
+      }, (3500 + index * 100));
+    });
+
+    // Particles & cánh rơi
+    const particles = []; const fallingPetals = [];
+
+    class Particle{
+      constructor(x,y){ this.x=x; this.y=y; this.vx=(Math.random()-.5)*1.5; this.vy=-Math.random()*2.5-1; this.life=1; this.decay=Math.random()*0.008+0.004; this.size=Math.random()*4+2; this.type=Math.random(); }
+      update(){ this.x+=this.vx; this.y+=this.vy; this.life-=this.decay; this.vy+=0.04; }
+      draw(){ ctx.globalAlpha=this.life*.5; if(this.type<.6){ const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size); g.addColorStop(0,'#f9d67a'); g.addColorStop(.5,'#e8b84f'); g.addColorStop(1,'rgba(232,184,79,0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=12; ctx.shadowColor='rgba(249,214,122,.4)'; ctx.strokeStyle='rgba(255,223,128,.3)'; ctx.lineWidth=1; ctx.stroke(); ctx.shadowBlur=0; } else if(this.type<.85){ ctx.fillStyle='#d4af37'; ctx.shadowBlur=8; ctx.shadowColor='rgba(212,175,55,.3)'; this.drawStar(this.x,this.y,5,this.size,this.size*.5); ctx.shadowBlur=0; } else { ctx.strokeStyle='rgba(255,235,180,.5)'; ctx.lineWidth=1.5; ctx.shadowBlur=6; ctx.shadowColor='rgba(255,235,180,.3)'; ctx.beginPath(); ctx.moveTo(this.x-this.size,this.y); ctx.lineTo(this.x+this.size,this.y); ctx.moveTo(this.x,this.y-this.size); ctx.lineTo(this.x,this.y+this.size); ctx.stroke(); ctx.shadowBlur=0; } }
+      drawStar(cx,cy,spikes,outer,inner){ let rot=Math.PI/2*3, x=cx, y=cy, step=Math.PI/spikes; ctx.beginPath(); ctx.moveTo(cx, cy-outer); for(let i=0;i<spikes;i++){ x=cx+Math.cos(rot)*outer; y=cy+Math.sin(rot)*outer; ctx.lineTo(x,y); rot+=step; x=cx+Math.cos(rot)*inner; y=cy+Math.sin(rot)*inner; ctx.lineTo(x,y); rot+=step; } ctx.lineTo(cx, cy-outer); ctx.closePath(); ctx.fill(); }
+    }
+
+    class FallingPetal{
+      constructor(){ this.x=Math.random()*canvas.width*.6+canvas.width*.2; this.y=Math.random()*canvas.height*.3+canvas.height*.1; this.vx=(Math.random()-.5)*1; this.vy=Math.random()*1.5+.5; this.rotation=Math.random()*360; this.rotationSpeed=(Math.random()-.5)*5; this.size=Math.random()*15+10; this.opacity=Math.random()*.6+.4; }
+      update(){ this.x+=this.vx; this.y+=this.vy; this.rotation+=this.rotationSpeed; this.vx+=(Math.random()-.5)*.1; }
+      draw(){ ctx.save(); ctx.translate(this.x,this.y); ctx.rotate(this.rotation*Math.PI/180); ctx.globalAlpha=this.opacity; ctx.fillStyle='#ffd93d'; ctx.beginPath(); ctx.ellipse(0,0,this.size,this.size*1.5,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+    }
+
+  /* ================================================================ */
+/* ===== CODE HOÀN CHỈNH (GỘP CẢ 2 TÍNH NĂNG) ===== */
+
+function startParticles(x_offset_from_bouquet, y_height_from_bottom){ 
+  setInterval(()=>{ 
+    // Chỉ thực hiện nếu là màn hình desktop (rộng hơn 900px)
+    if (window.innerWidth > 900) {
+      // Tính toán lại tọa độ MỖI KHI TẠO HẠT
+      const bouquetLeftPx = bouquet.offsetLeft; // Lấy vị trí % của bó hoa, đổi ra px
+      const spawnX = bouquetLeftPx + x_offset_from_bouquet; // Tọa độ X cuối cùng
+      
+      // canvas.height được cập nhật tự động khi resize (nhờ hàm sizeCanvas)
+      const spawnY = canvas.height - y_height_from_bottom; // Tọa độ Y cuối cùng
+
+      for(let i=0;i<3;i++){ 
+        // Gửi tọa độ "tươi" vừa tính được
+        particles.push(new Particle(spawnX, spawnY)); 
+      } 
+    }
+  }, 200); 
+}
+
+/* ================================================================ */
+
+    setTimeout(()=>{ setInterval(()=>{ const n=Math.floor(Math.random()*3)+3; for(let i=0;i<n;i++){ if(fallingPetals.length<25){ setTimeout(()=> fallingPetals.push(new FallingPetal()), i*100); } } },1200); },5000);
+
+    function animate(){ ctx.clearRect(0,0,canvas.width,canvas.height); for(let i=particles.length-1;i>=0;i--){ particles[i].update(); particles[i].draw(); if(particles[i].life<=0){ particles.splice(i,1); } } for(let i=fallingPetals.length-1;i>=0;i--){ fallingPetals[i].update(); fallingPetals[i].draw(); if(fallingPetals[i].y>canvas.height){ fallingPetals.splice(i,1); } } requestAnimationFrame(animate); }
+    animate();
+
+    window.addEventListener('resize', sizeCanvas);
+
+    /* ===================== SÁCH – RANDOM LỜI CHÚC & GÕ CHỮ ===================== */
+    const wishes = [
+  "Nhân ngày Nhà giáo Việt Nam 20/11, em xin gửi tới {teacher} lời tri ân chân thành. Cảm ơn {teacher} vì đã kiên nhẫn, dịu dàng và luôn tin vào khả năng của chúng em. Chúc {teacher} thật nhiều sức khỏe và bình an để tiếp tục thắp lửa yêu thương nơi mái trường.",
+  "20/11 không chỉ là một ngày kỷ niệm, mà là dịp để chúng em lắng lại và biết ơn. Xin cảm ơn {teacher} vì đã cho chúng em không chỉ kiến thức, mà còn là cách sống tử tế, bền bỉ và biết sẻ chia. Kính chúc {teacher} luôn an yên, hạnh phúc bên những thế hệ học trò thân yêu.",
+  "Mỗi bài giảng của {teacher} là một hạt mầm, mỗi lời động viên là một tia nắng. Nhờ {teacher}, chúng em học cách kiên trì trước khó khăn và dịu dàng với chính mình. Chúc {teacher} ngày 20/11 thật ấm áp và rực rỡ như những mùa nắng đẹp nhất.",
+  "Có những điều không thể đo đếm bằng điểm số: là ánh mắt tin tưởng, là nụ cười khích lệ của {teacher}. Em biết ơn vì {teacher} đã ở đó, kiên nhẫn đồng hành cùng chúng em. Chúc {teacher} luôn mạnh khoẻ, bình an và trọn vẹn niềm vui với nghề.",
+  "Tri thức mở đường, trái tim dẫn lối – đó là điều {teacher} đã dành cho chúng em. Cảm ơn {teacher} vì đã dạy chúng em biết mơ ước và dám dấn bước. Kính chúc {teacher} 20/11 thật nhiều yêu thương và những điều tốt lành.",
+  "Giữa bảng đen và phấn trắng, {teacher} lặng lẽ viết nên ước mơ cho bao thế hệ. Hôm nay, chúng em chỉ muốn nói: cảm ơn {teacher} vì đã tin chúng em, dù đôi khi chúng em còn vụng dại. Chúc {teacher} luôn khoẻ mạnh và thật hạnh phúc.",
+  "Cảm ơn {teacher} vì đã trao cho chúng em cả kho tàng tri thức và lòng nhân ái. Mỗi ngày đến lớp là một ngày được lớn lên từ sự tận tâm của {teacher}. Chúc {teacher} 20/11 trọn vẹn nụ cười và bình an.",
+  "Nếu tri thức là ánh sáng, {teacher} chính là người thắp đèn. Nhờ {teacher}, chúng em học cách đi chậm mà chắc, tử tế và kiên định. Xin gửi đến {teacher} lời chúc 20/11 sâu sắc nhất cùng ngàn lời biết ơn.",
+  "Có những bài học không có trong giáo trình – đó là cách làm người, lòng kiên nhẫn và bao dung. {teacher} đã cho chúng em tất cả những điều ấy. Chúc {teacher} luôn vững tay chèo, an yên giữa bến bờ yêu thương của học trò.",
+  "Thời gian có thể trôi, lớp học có thể đổi thay, nhưng tình thầy trò thì luôn ở lại. Cảm ơn {teacher} vì đã đi cùng chúng em suốt một đoạn tuổi trẻ. Kính chúc {teacher} 20/11 an lành, ấm áp và thật nhiều sức khỏe.",
+
+  "Chúc {teacher} luôn mạnh khỏe, hạnh phúc và tiếp tục truyền cảm hứng cho những thế hệ học trò bằng ngọn lửa yêu nghề không bao giờ tắt.",
+  "Mỗi bài giảng, mỗi lời dạy của {teacher} là hành trang quý giá, giúp học trò vững vàng trên con đường trưởng thành và làm người.",
+  "Xin gửi lời tri ân sâu sắc đến những người đã lặng thầm gieo hạt tri thức, nuôi dưỡng biết bao ước mơ trở thành hiện thực.",
+  "Chúc {teacher} luôn giữ trong tim niềm tự hào, bởi nhờ {teacher}, biết bao trái tim trẻ đã học được cách yêu thương và sống tử tế.",
+  "Cảm ơn {teacher} – những người đã dạy không chỉ kiến thức, mà còn dạy lòng nhân ái, nghị lực và sự kiên định trong cuộc sống.",
+  "Chúc những người lái đò luôn bình an, dù sóng gió thời gian có cuộn trào, vẫn giữ được tấm lòng nguyên vẹn với nghề dạy học.",
+  "Tri thức {teacher} trao là ngọn đèn soi sáng, giúp người học trò dù đi xa đến đâu vẫn tìm được hướng trở về chính mình.",
+  "Xin cảm ơn những người đã chọn nghề gieo chữ – một hành trình thầm lặng nhưng chứa đựng biết bao yêu thương và hi sinh.",
+  "Chúc {teacher} mỗi ngày đều thấy ý nghĩa trong công việc mình làm, vì mỗi học trò là một bông hoa nở từ tấm lòng {teacher}.",
+  "Không có {teacher} không có những ước mơ bay xa. Xin gửi lời chúc chân thành nhất tới những người đang làm nên tương lai đất nước.",
+  "Chúc {teacher} luôn đủ sức khỏe, đủ yêu thương và đủ kiên nhẫn để tiếp tục nuôi dưỡng những thế hệ học trò đầy khát vọng.",
+  "Cảm ơn {teacher} đã dành cả tuổi trẻ để thắp sáng con đường tri thức, nơi từng học trò tìm thấy chính mình.",
+  "Chúc {teacher} mãi giữ được tâm hồn tươi trẻ và niềm tin rằng: mỗi ngày đến lớp là một ngày gieo thêm hi vọng.",
+  "Không một lời cảm ơn nào đủ để nói hết lòng biết ơn dành cho những người đã dạy ta cách sống và cách yêu thương.",
+  "Mỗi bài học, mỗi lời dạy của {teacher} là món quà vô giá mà thời gian không bao giờ xóa nhòa.",
+  "Chúc những người thầy, người cô luôn được đón nhận yêu thương như chính cách họ đã trao đi suốt những năm tháng tận tụy.",
+  "Cảm ơn {teacher} – những người đã dùng trái tim để dạy, dùng sự kiên nhẫn để dẫn lối, và dùng tình thương để đổi lấy nụ cười của học trò.",
+  "Chúc {teacher} luôn hạnh phúc vì biết rằng, ở đâu đó ngoài kia, vẫn có những người học trò luôn nhớ ơn {teacher}.",
+  "Dưới ánh đèn lớp học, có biết bao đêm {teacher} âm thầm chấm bài – xin gửi trọn sự biết ơn đến những hy sinh thầm lặng ấy.",
+  "Không chỉ dạy chữ, {teacher} còn dạy cách làm người – và đó chính là món quà quý giá nhất cuộc đời ban tặng.",
+  "Chúc {teacher} có một ngày 20/11 tràn đầy niềm vui, tình yêu và niềm tự hào vì bao thế hệ học trò đang trưởng thành từ tâm huyết của mình.",
+  "Công ơn dạy dỗ của {teacher} mãi là ngọn lửa soi sáng, giúp bao trái tim trẻ vững bước giữa cuộc đời rộng lớn.",
+  "Xin gửi ngàn lời chúc tới những người đang âm thầm đứng sau thành công của biết bao thế hệ – những người thầy, người cô tận tụy.",
+  "Chúc {teacher} mãi giữ trong tim ngọn lửa yêu nghề và niềm vui khi nhìn thấy học trò của mình trưởng thành, tự tin và hạnh phúc.",
+  "Cảm ơn {teacher} đã biến tri thức thành cảm hứng, biến mỗi tiết học thành một kỷ niệm khó quên trong tuổi trẻ của bao thế hệ.",
+  "Không có {teacher}, thế giới thiếu đi những trái tim biết mơ ước và những tâm hồn biết sống vì người khác.",
+  "Chúc {teacher} mãi là những người truyền cảm hứng, khơi dậy niềm tin và dẫn đường cho những ước mơ bay xa.",
+  "Công việc của {teacher} có thể không ồn ào, nhưng giá trị của nó vang vọng mãi trong từng bước đi của học trò.",
+  "Xin gửi lời cảm ơn chân thành nhất đến những người đã chọn gieo yêu thương thay vì tìm hào quang cho riêng mình.",
+  "Mỗi mùa 20/11 đi qua, lại thêm một thế hệ trưởng thành – và dấu ấn của {teacher} vẫn còn đó, lặng lẽ mà sâu sắc.",
+  "Chúc {teacher} luôn giữ nụ cười, bởi chỉ một nụ cười của {teacher} thôi cũng đủ khiến học trò thấy ấm lòng.",
+  "Tri thức là ánh sáng, còn {teacher} là người cầm đuốc – chúc ngọn đuốc ấy mãi cháy rực trong tim mỗi người thầy, người cô.",
+  "Mỗi người học trò khi bước ra đời đều mang theo hình bóng của {teacher} – những người đã giúp họ đứng vững giữa bao đổi thay.",
+  "Chúc {teacher} luôn hạnh phúc khi nhìn lại, vì biết rằng từng học trò nhỏ bé ngày nào giờ đã trở thành niềm tự hào của mình.",
+  "Cảm ơn {teacher} đã dạy cách sống thật với chính mình, và dạy rằng thành công bắt đầu từ lòng biết ơn.",
+  "Chúc {teacher} một ngày 20/11 thật ý nghĩa, nhận được những điều tốt đẹp như chính những gì {teacher} đã trao đi.",
+  "Người gieo chữ không cần vinh quang, chỉ cần thấy hạt mầm tri thức đơm hoa – chúc {teacher} mãi là người vun trồng những mùa yêu thương.",
+  "Chúc {teacher} có thật nhiều sức khỏe, để vẫn tiếp tục viết nên những câu chuyện đẹp về tình người và tri thức.",
+  "Mỗi bước đi thành công của học trò hôm nay đều mang dấu ấn của {teacher} – người đã dạy cách bước đi đầu tiên.",
+  "20/11 – ngày để tri ân những con người đã lặng lẽ viết nên điều vĩ đại bằng phấn trắng và bảng đen.",
+  "Chúc {teacher} luôn được đón nhận những đóa hoa tri ân – không chỉ bằng lời nói, mà bằng chính thành quả của bao thế hệ học trò.",
+  "Người thầy không chỉ dạy ta điều đúng – sai, mà còn dạy cách giữ trái tim nhân hậu giữa thế giới nhiều đổi thay.",
+  "Chúc {teacher} mỗi sáng đến lớp đều thấy niềm vui trong ánh mắt học trò, và hạnh phúc khi biết mình đang tạo nên điều ý nghĩa.",
+  "Cảm ơn {teacher} đã dành cả đời để trao đi tri thức, để từng thế hệ học trò được sống trọn vẹn hơn, tốt đẹp hơn.",
+  "20/11 – ngày của những người thầy, người cô tận tâm, những người đã chọn sống vì một điều cao đẹp: gieo chữ và gieo người.",
+  "Chúc {teacher} luôn được bình an trong tâm hồn, bởi chính sự bình an ấy đã giúp biết bao thế hệ tìm thấy hướng đi trong cuộc sống.",
+  "Mỗi bài học năm xưa không chỉ là tri thức, mà là một phần tuổi trẻ, là món quà vô giá {teacher} để lại cho học trò hôm nay."
+];
+
+    const messageEl = document.getElementById('messageText');
+    const metaEl = document.getElementById('messageMeta');
+    const btnCopy = document.getElementById('btnCopy');
+
+    function randomWish(){ return wishes[Math.floor(Math.random()*wishes.length)]; }
+
+    function formatMeta(who, date){
+      const dd = String(date.getDate()).padStart(2,'0');
+      const mm = String(date.getMonth()+1).padStart(2,'0');
+      const yyyy = date.getFullYear();
+      return `Gửi ${who} – ${dd}/${mm}/${yyyy}`;
+    }
+
+    function interpolateTeacher(text, who){ return text.replace(/\{teacher\}/g, who); }
+
+    async function typeText(el, text, speed=24){
+      el.classList.remove('finished');
+      el.textContent = "";
+      el.style.opacity = 1; el.style.transform = 'translateY(0)';
+      for (let i=0; i<text.length; i++){
+        el.textContent += text[i];
+        await new Promise(r => setTimeout(r, speed*(Math.random()*0.6+0.7)));
+      }
+      el.classList.add('finished');
+    }
+
+    function renderMeta(){
+      const now = new Date();
+      const who = teacherName && teacherName.trim() ? teacherName.trim() : 'thầy/cô';
+      metaEl.textContent = formatMeta(who, now);
+    }
+
+    async function showNewWish(){
+      const wishRaw = randomWish();
+      const who = teacherName && teacherName.trim() ? teacherName.trim() : 'thầy/cô';
+      const wish = interpolateTeacher(wishRaw, who);
+      await typeText(messageEl, wish, 16);
+      renderMeta();
+    }
+
+     /* ===================== DEMO NÚT NHẠC ===================== */
+const audioBtn = document.getElementById('audioBtn');
+const iconPlay = document.getElementById('iconPlay');
+const iconPause = document.getElementById('iconPause');
+const song = document.getElementById('song');
+    
+    // ====== Modal nhập tên & mở sách ======
+    const nameModal = document.getElementById('nameModal');
+    const teacherInput = document.getElementById('teacherInput');
+    const saveNameBtn = document.getElementById('saveName');
+
+    let teacherName = localStorage.getItem('teacherName') || '';
+
+    function openNameModal(){ nameModal.classList.add('show'); setTimeout(()=>teacherInput && teacherInput.focus(), 50); }
+    function closeNameModal(){ nameModal.classList.remove('show'); }
+
+   saveNameBtn.addEventListener('click', ()=>{
+      const val = (teacherInput.value || '').trim();
+
+      // THÊM 2 DÒNG NÀY ĐỂ "MỞ KHÓA" ÂM THANH
+      song.play();
+      song.pause();
+      // KẾT THÚC PHẦN THÊM
+
+      if(!val){
+        teacherInput.focus();
+
+        teacherInput.setAttribute('aria-invalid','true');
+        teacherInput.style.borderColor = '#e25c3d';
+        teacherInput.style.boxShadow = '0 0 0 3px rgba(226,92,61,.15)';
+        return;
+      }
+      teacherName = val;
+      try{ localStorage.setItem('teacherName', teacherName); }catch(e){}
+      closeNameModal();
+      const coverFront = document.querySelector('.cover-front');
+      let rendered = false;
+      const onEnd = (ev)=>{
+        if(!rendered && ev.animationName === 'openCover'){
+          rendered = true;
+          showNewWish();
+        }
+      };
+      coverFront.addEventListener('animationend', onEnd, { once:true });
+      coverFront.classList.add('open');
+      setTimeout(()=>{ if(!rendered){ showNewWish(); } }, 1800);
+    });
+
+    teacherInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ saveNameBtn.click(); }});
+
+    setTimeout(()=>{ openNameModal(); }, 800);
+   
+let isPlaying = false; // Giữ nguyên biến này để theo dõi
+
+audioBtn.addEventListener('click', () => {
+    // Chúng ta sẽ kiểm tra trạng thái thực tế của file nhạc
+    if (song.paused) {
+        song.play(); // Nếu đang dừng -> thì phát nhạc
+        isPlaying = true;
+    } else {
+        song.pause(); // Nếu đang phát -> thì dừng nhạc
+        isPlaying = false;
+    }
+
+    // Cập nhật icon và hiệu ứng dựa trên trạng thái mới
+    audioBtn.classList.toggle('playing', isPlaying);
+    iconPlay.style.display = isPlaying ? 'none' : '';
+    iconPause.style.display = isPlaying ? '' : 'none';
+});
+
+    /* ===================== TESTS ===================== */
+    (function runTests(){
+      const results = [];
+      const t1 = formatMeta('Cô Lan', new Date('2025-10-31T00:00:00'));
+      results.push(['formatMeta', t1 === 'Gửi Cô Lan – 31/10/2025']);
+
+      const t2 = interpolateTeacher('Xin chào {teacher}, {teacher}!', 'Thầy Minh');
+      results.push(['interpolateTeacher', t2 === 'Xin chào Thầy Minh, Thầy Minh!']);
+
+      const sample = randomWish();
+      const who = 'Cô Hạnh';
+      const out = interpolateTeacher(sample, who);
+      results.push(['wishContainsWho', out.includes(who)]);
+
+      const ok = results.every(([_, pass]) => pass);
+      console.log('\u2705 20/11 UI tests:', Object.fromEntries(results));
+      if(!ok){ console.warn('\u26A0\uFE0F Some tests failed.'); }
+    })();
+
+    (async function runMoreTests(){
+      const results = [];
+      const metaDefault = formatMeta('thầy/cô', new Date('2024-01-05T00:00:00'));
+      results.push(['formatMetaDefault', metaDefault === 'Gửi thầy/cô – 05/01/2024']);
+
+      const tmp = document.createElement('div');
+      tmp.style.position='absolute'; tmp.style.left='-9999px'; document.body.appendChild(tmp);
+      await typeText(tmp, 'abc', 0);
+      results.push(['typeTextFinish', tmp.textContent === 'abc' && tmp.classList.contains('finished')]);
+      tmp.remove();
+
+      console.log('\u2705 Extra tests:', Object.fromEntries(results));
+    })();
+  </script>
+</body>
+</html>
+
+
